@@ -1,0 +1,68 @@
+<div class="home-wrapper">
+  <div class="home-card">
+    
+    <!-- Left Side: Architectural / Property Background Image -->
+    <div class="image-section">
+      <div class="brand-top-left">
+        <span class="logo-icon">❖</span>
+        <span class="brand-title">WorkerPartner</span>
+      </div>
+    </div>
+
+    <!-- Right Side: Content / Form Window -->
+    <div class="form-section">
+      <div class="form-header">
+        <h2>Welcome to <span class="highlight">WorkerPartner</span></h2>
+        <p class="subtext">If you have problem, we have WorkerPartner</p>
+        
+        <div class="progress-bar">
+          <div class="active-progress"></div>
+        </div>
+      </div>
+
+      
+      <form [formGroup]="homeForm" (ngSubmit)="onSubmit()">
+        <div class="input-field">
+          <span class="field-icon">👤</span>
+          <input 
+            type="text" 
+            formControlName="username" 
+            placeholder="Email ID or Mobile Number" 
+          />
+        </div>
+
+        <div class="input-field">
+          <span class="field-icon">🔑</span>
+          <input 
+            type="password" 
+            formControlName="password" 
+            placeholder="••••••••" 
+          />
+        </div>
+
+        <div class="options-row">
+          <label class="remember-me">
+            <input type="checkbox" formControlName="rememberMe" />
+            <span>Remember me</span>
+          </label>
+          <a routerLink="/forgot" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <div class="actions-row">
+          <button type="submit" class="btn btn-primary">Login</button>
+          <a routerLink="/register" class="btn btn-secondary">Create profile</a>
+        </div>
+      </form>
+
+      <div class="social-footer">
+        <span>Or login with</span>
+        <div class="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Google</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
