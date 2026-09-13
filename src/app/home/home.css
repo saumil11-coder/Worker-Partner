@@ -135,21 +135,15 @@
   text-decoration: none;
 }
 
-/* Centered Full-Width Login Row */
+/* Centered Login Row */
 .login-row {
   display: flex;
   justify-content: center;   /* Centers the button horizontally */
   align-items: center;       /* Centers the button vertically */
   width: 100%;
-
-
+  margin-bottom: 16px;       /* Adds spacing before the OR divider */
 }
 
-.btn-center {
-  width: 50%;
-   flex: 0 0 50%;
-    max-width: none 
-}
 /* Center OR Divider Text */
 .or-divider {
   display: flex;
@@ -186,13 +180,15 @@
 }
 
 .btn-primary {
-  background-color: #3b82f6;
-  color: #ffffff;
+  background-color:#ffffff;
+  color: #2563eb;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .btn-primary:hover {
   background-color: #2563eb;
+  color: #ffffff;
+   border-color: #cbd5e1;
 }
 
 .btn-primary:disabled {
@@ -208,7 +204,8 @@
 }
 
 .btn-secondary:hover {
-  background-color: #f8fafc;
+  background-color:#2563eb;
+  color: #ffffff;
   border-color: #cbd5e1;
 }
 
@@ -230,4 +227,10 @@
   color: #2563eb;
   text-decoration: none;
   font-weight: 600;
+}
+
+.btn-center {
+  /* 50% width minus half of the 12px gap from the register row */
+  width: calc(50% - 6px);
+  flex: none; /* Prevents the flex: 1 from the generic .btn class from stretching it */
 }

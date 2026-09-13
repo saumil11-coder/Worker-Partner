@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { Register } from './register/register'; 
+import { RegisterAsCustomer } from './register/register-as-customer/register-as-customer';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -8,11 +10,16 @@ export const routes: Routes = [
   },
   { 
     path: 'register', 
-    loadComponent: () => import('./register/register').then(m => m.Register) 
+    component: Register,
+    children: [
+      { path: 'customer', component: RegisterAsCustomer },
+      // { path: 'employee', component: RegisterAsEmployee } 
+    ]
   },
   { 
     path: 'home', 
     loadComponent: () => import('./home/home').then(m => m.Home) 
-  },
-  { path: '**', redirectTo: 'login' }
+  }
+   ,
+   { path: '**', redirectTo: 'RegisterAsCustomer' }
 ];
