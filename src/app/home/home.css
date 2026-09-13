@@ -16,9 +16,9 @@
 }
 
 .home-card {
-display: flex;
+  display: flex;
   width: 85vw;
-  height: 85vh; /* Scaled down slightly to fit cleanly on all screen heights */
+  height: 85vh;
   max-width: 1400px;
   max-height: 800px;
   background: #ffffff;
@@ -59,10 +59,11 @@ display: flex;
 
 .form-section {
   flex: 1.2;
-  padding: 48px 44px;
+  padding: 40px 45px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  overflow-y: auto;
 }
 
 .form-header h2 {
@@ -79,23 +80,8 @@ display: flex;
 .subtext {
   font-size: 0.85rem;
   color: #94a3b8;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   line-height: 1.4;
-}
-
-.progress-bar {
-  width: 120px;
-  height: 3px;
-  background-color: #f1f5f9;
-  border-radius: 2px;
-  margin-bottom: 28px;
-}
-
-.active-progress {
-  width: 45px;
-  height: 100%;
-  background-color: #2563eb;
-  border-radius: 2px;
 }
 
 .input-field {
@@ -133,7 +119,7 @@ display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .remember-me {
@@ -149,10 +135,41 @@ display: flex;
   text-decoration: none;
 }
 
-.actions-row {
+/* Centered Full-Width Login Row */
+.login-row {
+  display: flex;
+  justify-content: center;   /* Centers the button horizontally */
+  align-items: center;       /* Centers the button vertically */
+  width: 100%;
+
+
+}
+
+.btn-center {
+  width: 50%;
+   flex: 0 0 50%;
+    max-width: none 
+}
+/* Center OR Divider Text */
+.or-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.or-divider span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+/* Side-by-Side Registration Buttons Row */
+.register-options-row {
   display: flex;
   gap: 12px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .btn {
@@ -186,15 +203,17 @@ display: flex;
 .btn-secondary {
   background-color: #ffffff;
   color: #2563eb;
-  border: 1px solid #f1f5f9;
+  border: 1px solid #e2e8f0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .btn-secondary:hover {
   background-color: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .social-footer {
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 12px;

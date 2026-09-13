@@ -14,13 +14,8 @@
       <div class="form-header">
         <h2>Welcome to <span class="highlight">WorkerPartner</span></h2>
         <p class="subtext">If you have problem, we have WorkerPartner</p>
-        
-        <div class="progress-bar">
-          <div class="active-progress"></div>
-        </div>
       </div>
 
-      
       <form [formGroup]="homeForm" (ngSubmit)="onSubmit()">
         <div class="input-field">
           <span class="field-icon">👤</span>
@@ -48,9 +43,20 @@
           <a routerLink="/forgot" class="forgot-link">Forgot password?</a>
         </div>
 
-        <div class="actions-row">
-          <button type="submit" class="btn btn-primary">Login</button>
-          <a routerLink="/register" class="btn btn-secondary">Create profile</a>
+        <!-- Centered Login Button -->
+        <div class="login-row">
+          <button type="submit" class="btn btn-primary btn-center">Login</button>
+        </div>
+
+        <!-- Divider text -->
+        <div class="or-divider">
+          <span>OR</span>
+        </div>
+
+        <!-- Side-by-side Registration Buttons -->
+        <div class="register-options-row">
+          <a routerLink="/register-customer" class="btn btn-secondary">Register as Customer</a>
+          <a routerLink="/register-employee" class="btn btn-secondary">Register as Employee</a>
         </div>
       </form>
 
