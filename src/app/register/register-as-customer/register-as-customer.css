@@ -3,18 +3,28 @@
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* Full screen gradient background */
+/* ==============================
+   Full Screen Background
+   ============================== */
 .register-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
-  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    #f7f8f9 0%,
+    #f3f6f9 100%
+  );
+  padding: 40px;
   position: relative;
 }
 
-/* Close button positioned top right */
+/* ==============================
+   Close Button
+   ============================== */
 .close-btn {
   position: absolute;
   top: 30px;
@@ -36,46 +46,62 @@
   background: rgba(255, 255, 255, 0.8);
 }
 
-/* Main Form Card */
+/* ==============================
+   MAIN FORM CARD
+   ============================== */
 .register-card {
-  width: 90vw;
-  max-width: 1000px;
+  width: 92vw;
+  max-width: 1200px;
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
+/* ==============================
+   TWO PANEL LAYOUT
+   ============================== */
 .form-layout {
   display: flex;
-  flex-wrap: wrap;
-  min-height: 600px;
+  min-height: 640px;
+  width: 100%;
 }
 
-/* Panel Layouts */
+/* ==============================
+   COMMON PANEL
+   ============================== */
 .panel {
   flex: 1;
-  padding: 60px 50px;
-  min-width: 300px;
+  padding: 55px 50px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
 }
 
+/* ==============================
+   LEFT PANEL
+   ============================== */
 .light-panel {
   background: #ffffff;
 }
 
+/* ==============================
+   RIGHT PANEL
+   ============================== */
 .dark-panel {
-  background: #4c3ded; /* Matching the purple/blue from the image */
+  background: #7368eb;
   color: #ffffff;
 }
 
-/* Typography & Headings */
+/* ==============================
+   HEADINGS
+   ============================== */
 .panel-title {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 600;
-  margin-bottom: 40px;
+  margin: 0 0 35px 0;
 }
 
 .blue-text {
@@ -86,30 +112,44 @@
   color: #ffffff;
 }
 
-/* Input Layout Grids */
+/* ==============================
+   INPUT ROW
+   ============================== */
 .row {
   display: flex;
   gap: 30px;
+  width: 100%;
 }
 
 .row .input-group {
   flex: 1;
 }
 
-/* Base Input Styles (Bottom Border Only) */
+/* ==============================
+   INPUT GROUP
+   ============================== */
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
+/* ==============================
+   LABEL
+   ============================== */
 .input-group label {
-  font-size: 0.8rem;
-  margin-bottom: 5px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
   opacity: 0.8;
 }
 
+/* ==============================
+   INPUT
+   ============================== */
 .input-group input {
+  width: 100%;
+  box-sizing: border-box;
   border: none;
   border-bottom: 1px solid #e2e8f0;
   background: transparent;
@@ -119,30 +159,36 @@
   transition: border-color 0.3s;
 }
 
-/* Light side text and border colors */
+/* LEFT INPUT */
 .light-panel .input-group input {
   color: #1e293b;
 }
+
 .light-panel .input-group input:focus {
   border-bottom-color: #3b82f6;
 }
+
 .light-panel .input-group label {
   color: #64748b;
 }
 
-/* Dark side text and border colors */
+/* RIGHT INPUT */
 .dark-panel .input-group input {
   color: #ffffff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
+
 .dark-panel .input-group input:focus {
   border-bottom-color: #ffffff;
 }
+
 .dark-panel .input-group label {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Footer Section */
+/* ==============================
+   FOOTER
+   ============================== */
 .footer-actions {
   margin-top: auto;
   display: flex;
@@ -150,10 +196,13 @@
   gap: 25px;
 }
 
+/* ==============================
+   CHECKBOX
+   ============================== */
 .checkbox-container {
   display: flex;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.8);
   gap: 10px;
 }
@@ -163,13 +212,15 @@
   font-weight: 600;
 }
 
-/* Pill-shaped Submit Button */
+/* ==============================
+   REGISTER BUTTON
+   ============================== */
 .submit-btn {
   background: #ffffff;
   color: #4c3ded;
   border: none;
   border-radius: 30px;
-  padding: 14px 30px;
+  padding: 14px 35px;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -187,12 +238,32 @@
   cursor: not-allowed;
 }
 
-/* Responsive view for mobile screens */
+/* ==============================
+   RESPONSIVE
+   ============================== */
 @media (max-width: 768px) {
+  .register-wrapper {
+    padding: 20px;
+  }
+
+  .register-card {
+    width: 100%;
+  }
+
   .form-layout {
     flex-direction: column;
   }
+
   .panel {
-    padding: 40px 30px;
+    padding: 40px 25px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .panel-title {
+    margin-bottom: 25px;
   }
 }
