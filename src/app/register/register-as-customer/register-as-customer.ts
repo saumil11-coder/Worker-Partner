@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { RegistrationService } from '../../core/services/registeration-services';
+
 
 @Component({
   selector: 'app-register-as-customer',
@@ -13,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterAsCustomer {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private registrationService: RegistrationService) {
     this.registerForm = this.fb.group({
       // Left Panel Fields
       firstName: ['', Validators.required],
@@ -43,13 +44,12 @@ export class RegisterAsCustomer {
   onSubmit(): void {
     if (this.registerForm.valid) {
       console.log('Customer Registration Successful:', this.registerForm.value);
-      // Add your API call here
 
-      this.http.post('http://localhost:8080/api/registercustomer', this.registerForm.value)
-      .subscribe({
-          next: (res) => alert('Registration Successful!'),
-          error: (err) => alert('Registration failed: ' + err.error)
-        });
+      this.registrationService.registerCustomer(this.registerForm.value).subscribe({
+        next: (res) => alert('Registration Successful!'),
+        error: (err) => alert('Registration failed: ' + err.error)
+      });
+
     } else {
       this.registerForm.markAllAsTouched();
       console.log('Form is invalid');
