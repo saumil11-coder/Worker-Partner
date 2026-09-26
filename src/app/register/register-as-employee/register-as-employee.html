@@ -1,7 +1,4 @@
 <div class="register-wrapper">
-  <!-- Close Button linking back to home -->
-  <a routerLink="/" class="close-btn">✕</a>
-
   <div class="register-card">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-layout">
       
@@ -44,14 +41,19 @@
         <div class="row">
           <div class="input-group">
             <label>Aadhar Number</label>
-            <input type="text" formControlName="aadhar number" />
+            <div class="input-with-button">
+              <input type="text" formControlName="aadharNumber" />
+              <button type="button" class="verify-btn" (click)="verifyAadhar()">Verify</button>
+            </div>
           </div>
           <div class="input-group">
             <label>PAN Number</label>
-            <input type="text" formControlName="PAN number" />
+            <div class="input-with-button">
+              <input type="text" formControlName="panNumber" />
+              <button type="button" class="verify-btn" (click)="verifyPan()">Verify</button>
+            </div>
           </div>
         </div>
-
       </div>
 
       <!-- Right Panel: Account & Security -->
@@ -63,16 +65,14 @@
           <input type="email" formControlName="email" />
         </div>
 
-        
-          <div class="input-group dark-input">
-            <label>Password</label>
-            <input type="password" formControlName="password" />
-          </div>
-          <div class="input-group dark-input">
-            <label>Confirm Password</label>
-            <input type="password" formControlName="confirmPassword" />
-          </div>
-        
+        <div class="input-group dark-input">
+          <label>Password</label>
+          <input type="password" formControlName="password" />
+        </div>
+        <div class="input-group dark-input">
+          <label>Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" />
+        </div>
 
         <!-- Terms and Submit -->
         <div class="footer-actions">

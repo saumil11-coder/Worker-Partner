@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { RegistrationService } from '../../core/services/registeration-services';
-
 
 @Component({
   selector: 'app-register-as-employee',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './register-as-employee.html',
   styleUrl: './register-as-employee.css',
 })
@@ -21,6 +19,8 @@ export class RegisterAsEmployee {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      aadharNumber: ['', Validators.required], 
+      panNumber: ['', Validators.required],    
       
       // Right Panel Fields
       address: ['', Validators.required],
@@ -41,6 +41,17 @@ export class RegisterAsEmployee {
     return password === confirmPassword ? null : { mismatch: true };
   }
 
+  verifyAadhar(): void {
+    // Implement Aadhar verification logic here
+    const aadharValue = this.registerForm.get('aadharNumber')?.value;
+    console.log('Verifying Aadhar:', aadharValue ? '[Aadhaar Redacted]' : 'No value');
+  }
+
+  verifyPan(): void {
+    // Implement PAN verification logic here
+    console.log('Verifying PAN:', this.registerForm.get('panNumber')?.value);
+  }
+
   onSubmit(): void {
     if (this.registerForm.valid) {
       console.log('Customer Registration Successful:', this.registerForm.value);
@@ -49,7 +60,6 @@ export class RegisterAsEmployee {
         next: (res) => alert('Registration Successful!'),
         error: (err) => alert('Registration failed: ' + err.error)
       });
-
     } else {
       this.registerForm.markAllAsTouched();
       console.log('Form is invalid');
