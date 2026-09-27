@@ -125,7 +125,7 @@ export class RegisterAsEmployee {
     }
 
     if (this.registerForm.valid) {
-      this.registrationService.registerCustomer(this.registerForm.value).subscribe({
+      this.registrationService.registerEmployee(this.registerForm.value).subscribe({
         next: (res) => alert('Registration Successful!'),
         error: (err) => alert('Registration failed: ' + err.error)
       });

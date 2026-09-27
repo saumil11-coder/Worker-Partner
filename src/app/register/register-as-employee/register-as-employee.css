@@ -300,5 +300,25 @@
   .panel-title {
     margin-bottom: 25px;
   }
+  .verify-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+.verify-icon {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.text-red {
+  color: #dc2626;
+}
+
+.text-green {
+  color: #16a34a;
+}
 
 }

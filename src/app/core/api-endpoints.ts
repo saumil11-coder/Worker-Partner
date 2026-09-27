@@ -6,5 +6,7 @@ import { RegisterAsCustomer } from "../register/register-as-customer/register-as
 export const API_ENDPOINTS = {
     RegisterAsCustomer: `${environment.apiUrl}/registercustomer`,
      verifyAadhar: `${environment.apiUrl}/verify/aadhar`,
-  verifyPan: `${environment.apiUrl}/api/verify/pan`,
+  verifyPan: `${environment.apiUrl}/verify/pan`,
+  RegisterAsEmployee: `${environment.apiUrl}/registeremployee`
+
 }

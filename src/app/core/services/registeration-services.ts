@@ -22,5 +22,8 @@ export class RegistrationService {
       .set('panNumber', panNumber);
     return this.http.get<any>(API_ENDPOINTS.verifyPan, { params });
   }
+    registerEmployee(data: any) {
+    return this.http.post(API_ENDPOINTS.RegisterAsEmployee, data);
+  }
   
 }
