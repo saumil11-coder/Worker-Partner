@@ -47,7 +47,7 @@
   </div>
   <span *ngIf="aadharMessage" class="verify-message"
         [class.text-red]="!aadharVerified" [class.text-green]="aadharVerified">
-    {{ aadharMessage }}
+    {{ aadharMessage() }}
   </span>
 </div>
           <div class="input-group">
@@ -58,7 +58,7 @@
   </div>
   <span *ngIf="panMessage" class="verify-message"
         [class.text-red]="!panVerified" [class.text-green]="panVerified">
-    {{ panMessage }}
+    {{ panMessage() }}
   </span>
 </div>
         </div>

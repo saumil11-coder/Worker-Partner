@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegistrationService } from '../../core/services/registeration-services';
@@ -14,10 +14,10 @@ export class RegisterAsEmployee {
   registerForm: FormGroup;
 
   // Track verification status + messages for UI feedback
-  aadharVerified = false;
-  panVerified = false;
-  aadharMessage = '';
-  panMessage = '';
+  aadharVerified = signal(false);
+  panVerified = signal(false);
+  aadharMessage = signal('');
+  panMessage = signal('');
 
   constructor(private fb: FormBuilder, private registrationService: RegistrationService) {
     this.registerForm = this.fb.group({
@@ -42,12 +42,12 @@ export class RegisterAsEmployee {
 
     // If aadhar/pan number changes after verification, reset the verified flag
     this.registerForm.get('aadharNumber')?.valueChanges.subscribe(() => {
-      this.aadharVerified = false;
-      this.aadharMessage = '';
+      this.aadharVerified.set(false);
+      this.aadharMessage.set('');
     });
     this.registerForm.get('panNumber')?.valueChanges.subscribe(() => {
-      this.panVerified = false;
-      this.panMessage = '';
+      this.panVerified.set(false);
+      this.panMessage.set('');
     });
   }
 
@@ -68,24 +68,25 @@ export class RegisterAsEmployee {
     const aadharValue = aadharControl?.value;
 
     if (aadharControl?.invalid) {
-      this.aadharMessage = 'Enter a valid 12-digit Aadhar number first';
+      this.aadharMessage.set('Enter a valid 12-digit Aadhar number first');
       return;
     }
 
     const name = this.getFullName();
     if (!name) {
-      this.aadharMessage = 'Enter first and last name first';
+      this.aadharMessage.set('Enter first and last name first');
       return;
     }
 
     this.registrationService.verifyAadhar(name, aadharValue).subscribe({
       next: (res) => {
-        this.aadharVerified = res.verified;
-        this.aadharMessage = res.message;
+        console.log('Response received:', res, 'at', new Date().toISOString());
+        this.aadharVerified.set(res.verified); //aadharVerified= false
+        this.aadharMessage.set(res.message);
       },
       error: (err) => {
-        this.aadharVerified = false;
-        this.aadharMessage = err.error?.message || 'Verification failed';
+        this.aadharVerified.set(false);
+        this.aadharMessage.set(err.error?.message || 'Verification failed');
       }
     });
   }
@@ -95,30 +96,30 @@ export class RegisterAsEmployee {
     const panValue = panControl?.value;
 
     if (panControl?.invalid) {
-      this.panMessage = 'Enter a valid PAN number first';
+      this.panMessage.set('Enter a valid PAN number first');
       return;
     }
 
     const name = this.getFullName();
     if (!name) {
-      this.panMessage = 'Enter first and last name first';
+      this.panMessage.set('Enter first and last name first');
       return;
     }
 
     this.registrationService.verifyPan(name, panValue).subscribe({
       next: (res) => {
-        this.panVerified = res.verified;
-        this.panMessage = res.message;
+        this.panVerified.set(res.verified);
+        this.panMessage.set(res.message);
       },
       error: (err) => {
-        this.panVerified = false;
-        this.panMessage = err.error?.message || 'Verification failed';
+        this.panVerified.set(false);
+        this.panMessage.set(err.error?.message || 'Verification failed');
       }
     });
   }
 
   onSubmit(): void {
-    if (!this.aadharVerified || !this.panVerified) {
+    if (!this.aadharVerified() || !this.panVerified()) {
       alert('Please verify Aadhar and PAN before submitting');
       return;
     }
