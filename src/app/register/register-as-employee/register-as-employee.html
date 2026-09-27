@@ -40,19 +40,27 @@
 
         <div class="row">
           <div class="input-group">
-            <label>Aadhar Number</label>
-            <div class="input-with-button">
-              <input type="text" formControlName="aadharNumber" />
-              <button type="button" class="verify-btn" (click)="verifyAadhar()">Verify</button>
-            </div>
-          </div>
+  <label>Aadhar Number</label>
+  <div class="input-with-button">
+    <input type="text" formControlName="aadharNumber" />
+    <button type="button" class="verify-btn" (click)="verifyAadhar()">Verify</button>
+  </div>
+  <span *ngIf="aadharMessage" class="verify-message"
+        [class.text-red]="!aadharVerified" [class.text-green]="aadharVerified">
+    {{ aadharMessage }}
+  </span>
+</div>
           <div class="input-group">
-            <label>PAN Number</label>
-            <div class="input-with-button">
-              <input type="text" formControlName="panNumber" />
-              <button type="button" class="verify-btn" (click)="verifyPan()">Verify</button>
-            </div>
-          </div>
+  <label>PAN Number</label>
+  <div class="input-with-button">
+    <input type="text" formControlName="panNumber" />
+    <button type="button" class="verify-btn" (click)="verifyPan()">Verify</button>
+  </div>
+  <span *ngIf="panMessage" class="verify-message"
+        [class.text-red]="!panVerified" [class.text-green]="panVerified">
+    {{ panMessage }}
+  </span>
+</div>
         </div>
       </div>
 
