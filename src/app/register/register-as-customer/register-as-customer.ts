@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { RegistrationService } from '../../core/services/registeration-services';
+import { DevModeService } from '../../core/services/dev-mode.services';
+
 
 
 @Component({
@@ -14,7 +16,9 @@ import { RegistrationService } from '../../core/services/registeration-services'
 export class RegisterAsCustomer {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private registrationService: RegistrationService) {
+  constructor(private fb: FormBuilder, private registrationService: RegistrationService,
+      private devMode: DevModeService
+  ) {
     this.registerForm = this.fb.group({
       // Left Panel Fields
       firstName: ['', Validators.required],
@@ -32,6 +36,7 @@ export class RegisterAsCustomer {
       // Terms Checkbox
       terms: [false, Validators.requiredTrue]
     }, { validators: this.passwordMatchValidator });
+    this.devMode.stripValidators(this.registerForm);
   }
 
   // Custom validator for password matching

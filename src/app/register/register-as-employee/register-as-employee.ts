@@ -2,6 +2,8 @@ import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegistrationService } from '../../core/services/registeration-services';
+import { DevModeService } from '../../core/services/dev-mode.services';
+
 
 @Component({
   selector: 'app-register-as-employee',
@@ -19,7 +21,10 @@ export class RegisterAsEmployee {
   aadharMessage = signal('');
   panMessage = signal('');
 
-  constructor(private fb: FormBuilder, private registrationService: RegistrationService) {
+  constructor(private fb: FormBuilder, private registrationService: RegistrationService,
+        private devMode: DevModeService
+
+  ) {
     this.registerForm = this.fb.group({
       // Left Panel Fields
       firstName: ['', Validators.required],
@@ -35,10 +40,11 @@ export class RegisterAsEmployee {
       pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
-
+      
       // Terms Checkbox
       terms: [false, Validators.requiredTrue]
     }, { validators: this.passwordMatchValidator });
+       this.devMode.stripValidators(this.registerForm);
 
     // If aadhar/pan number changes after verification, reset the verified flag
     this.registerForm.get('aadharNumber')?.valueChanges.subscribe(() => {
@@ -119,10 +125,11 @@ export class RegisterAsEmployee {
   }
 
   onSubmit(): void {
-    if (!this.aadharVerified() || !this.panVerified()) {
-      alert('Please verify Aadhar and PAN before submitting');
-      return;
-    }
+    //Will have to uncomment further 
+    // if (!this.aadharVerified() || !this.panVerified()) {
+    //   alert('Please verify Aadhar and PAN before submitting');
+    //   return;
+    // }
 
     if (this.registerForm.valid) {
       this.registrationService.registerEmployee(this.registerForm.value).subscribe({
