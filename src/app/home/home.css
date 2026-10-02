@@ -180,15 +180,14 @@
 }
 
 .btn-primary {
-  background-color:#ffffff;
-  color: #2563eb;
+  background-color: #2563eb;
+  color: #ffffff;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .btn-primary:hover {
-  background-color: #2563eb;
+  background-color: #1d4fd8;
   color: #ffffff;
-   border-color: #cbd5e1;
 }
 
 .btn-primary:disabled {
@@ -199,7 +198,7 @@
 .btn-secondary {
   background-color: #ffffff;
   color: #2563eb;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #2563eb;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
@@ -233,4 +232,32 @@
   /* 50% width minus half of the 12px gap from the register row */
   width: calc(50% - 6px);
   flex: none; /* Prevents the flex: 1 from the generic .btn class from stretching it */
+}
+
+/* ===== NEW: Role switcher (Customer | Employee) ===== */
+.role-tabs {
+  display: flex;
+  background: #eef2f9;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.role-tabs button {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role-tabs button.active {
+  background: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

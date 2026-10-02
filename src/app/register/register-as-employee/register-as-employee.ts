@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 import { RegistrationService } from '../../core/services/registeration-services';
 import { DevModeService } from '../../core/services/dev-mode.services';
 
@@ -21,8 +23,12 @@ export class RegisterAsEmployee {
   aadharMessage = signal('');
   panMessage = signal('');
 
+  showSuccessModal = signal(false);
+
+
   constructor(private fb: FormBuilder, private registrationService: RegistrationService,
-        private devMode: DevModeService
+        private devMode: DevModeService,
+        private router: Router
 
   ) {
     this.registerForm = this.fb.group({
@@ -124,6 +130,11 @@ export class RegisterAsEmployee {
     });
   }
 
+  navigateToHome(): void {
+    this.showSuccessModal.set(false);
+    this.router.navigate(['/home']);
+}
+
   onSubmit(): void {
     //Will have to uncomment further 
     // if (!this.aadharVerified() || !this.panVerified()) {
@@ -133,11 +144,13 @@ export class RegisterAsEmployee {
 
     if (this.registerForm.valid) {
       this.registrationService.registerEmployee(this.registerForm.value).subscribe({
-        next: (res) => alert('Registration Successful!'),
+        next: (res) => {this.showSuccessModal.set(true);},
         error: (err) => alert('Registration failed: ' + err.error)
       });
     } else {
       this.registerForm.markAllAsTouched();
     }
+
+
   }
 }

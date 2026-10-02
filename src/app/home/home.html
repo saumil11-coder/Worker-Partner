@@ -16,6 +16,16 @@
         <p class="subtext">If you have problem, we have WorkerPartner</p>
       </div>
 
+      <!-- NEW: Role switcher (choose once, buttons below update automatically) -->
+      <div class="role-tabs">
+        <button type="button" [class.active]="role === 'customer'" (click)="setRole('customer')">
+          🛒 Customer
+        </button>
+        <button type="button" [class.active]="role === 'employee'" (click)="setRole('employee')">
+          🛠️ Employee
+        </button>
+      </div>
+
       <form [formGroup]="homeForm" (ngSubmit)="onSubmit()">
         <div class="input-field">
           <span class="field-icon">👤</span>
@@ -43,20 +53,23 @@
           <a routerLink="/forgot" class="forgot-link">Forgot password?</a>
         </div>
 
-        <!-- Centered Login Button -->
+        <!-- Login button: text changes with the selected role -->
         <div class="login-row">
-          <button type="submit" class="btn btn-primary btn-center">Login</button>
+          <button type="submit" class="btn btn-primary btn-center">
+            Login as {{ role === 'customer' ? 'Customer' : 'Employee' }}
+          </button>
         </div>
 
         <!-- Divider text -->
         <div class="or-divider">
-          <span>OR</span>
+          <span>NEW HERE?</span>
         </div>
 
-        <!-- Side-by-side Registration Buttons -->
+        <!-- Register button: text and route change with the selected role -->
         <div class="register-options-row">
-          <a routerLink="/register/customer" class="btn btn-secondary">Register as Customer</a>
-          <a routerLink="/register/employee" class="btn btn-secondary">Register as Employee</a>
+          <a [routerLink]="'/register/' + role" class="btn btn-secondary">
+            Register as {{ role === 'customer' ? 'Customer' : 'Employee' }}
+          </a>
         </div>
       </form>
 
