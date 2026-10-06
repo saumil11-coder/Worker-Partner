@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../core/services/auth-service';
 
 // Custom validator to check for valid Email OR 10-digit Mobile Number
 export function emailOrPhoneValidator(control: AbstractControl): ValidationErrors | null {
@@ -21,17 +24,22 @@ export function emailOrPhoneValidator(control: AbstractControl): ValidationError
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home {
   homeForm: FormGroup;
-
-  // NEW: selected role (drives button text, register route and login role)
   role: 'customer' | 'employee' = 'customer';
 
-  constructor(private fb: FormBuilder) {
+  loginMessage = signal('');
+   loginPassed = signal(false);
+  loginFailed = signal(false);
+
+
+  constructor(private fb: FormBuilder, private router: Router,
+        private authService: AuthService
+  ) {
     // Add { updateOn: 'submit' } as the second argument to the group
     this.homeForm = this.fb.group({
       username: ['', [Validators.required, emailOrPhoneValidator]], 
@@ -45,15 +53,40 @@ export class Home {
     this.role = role;
   }
 
-  onSubmit(): void {
-    if (this.homeForm.valid) {
-      // NEW: role is added to the payload. Use this wherever you call your login API.
-      const payload = { ...this.homeForm.value, role: this.role };
-      console.log('Form Submitted Successfully:', payload);
-    } else {
-      // Optional: Marks all fields as touched so you can display CSS error states
+ onSubmit(): void {
+    if (this.homeForm.invalid) {
       this.homeForm.markAllAsTouched();
-      console.log('Validation Failed');
-    } 
+      return;
+    }
+
+    const { username, password } = this.homeForm.value;
+
+    const loginCall = this.role === 'employee'
+      ? this.authService.loginEmployee(username, password)
+      : this.authService.loginCustomer(username, password);
+
+    loginCall.subscribe({
+      next: (res) => {
+        
+        console.log("hit successfully");
+        if(res.verified==="true"){
+           this.loginPassed.set(res.verified);
+           this.loginMessage.set('Valid');
+        }
+        else{
+          this.loginFailed.set(res.verified);
+          this.loginMessage.set('Invalid email/phone or password');
+        }
+        
+
+        // 🔀 Redirect straight to the right portal on success
+        const destination = this.role === 'employee' ? '/employee/dashboard' : '/customer/dashboard';
+        this.router.navigate([destination]);
+      },
+      error: (err) => {
+        this.loginFailed.set(true);
+        this.loginMessage.set(err.error?.message || 'Invalid email/phone or password');
+      }
+    });
   }
 }

@@ -261,3 +261,8 @@
   color: #2563eb;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+.login-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin: -8px 0 8px;
+}

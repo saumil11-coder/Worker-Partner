@@ -4,12 +4,12 @@ import { RegisterAsCustomer } from './register/register-as-customer/register-as-
 // 1. Add this import for the employee component
 import { RegisterAsEmployee } from './register/register-as-employee/register-as-employee'; 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { 
-    path: 'login', 
-    loadComponent: () => import('./login/login').then(m => m.Login) 
-  },
+  //   { path: 'employee/dashboard', component: EmployeeDashboard },
+  // { path: 'customer/dashboard', component: CustomerDashboard },
+
   { 
     path: 'register', 
     component: Register,

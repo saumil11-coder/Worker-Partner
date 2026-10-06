@@ -53,6 +53,10 @@
           <a routerLink="/forgot" class="forgot-link">Forgot password?</a>
         </div>
 
+          <p *ngIf="loginMessage()" class="login-error">
+          {{ loginMessage() }}
+        </p>
+
         <!-- Login button: text changes with the selected role -->
         <div class="login-row">
           <button type="submit" class="btn btn-primary btn-center">

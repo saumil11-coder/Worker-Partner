@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
     RegisterAsCustomer: `${environment.apiUrl}/registercustomer`,
      verifyAadhar: `${environment.apiUrl}/verify/aadhar`,
   verifyPan: `${environment.apiUrl}/verify/pan`,
-  RegisterAsEmployee: `${environment.apiUrl}/registeremployee`
+  RegisterAsEmployee: `${environment.apiUrl}/registeremployee`,
+  loginEmployee: `${environment.apiUrl}/find/employee`,
+  loginCustomer: `${environment.apiUrl}/api/auth/customer/login`,
 
 }
