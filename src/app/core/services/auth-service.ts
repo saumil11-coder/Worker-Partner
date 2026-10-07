@@ -19,8 +19,8 @@ export class AuthService {
 
     loginCustomer(username: string, password: string) {
    const params = new HttpParams()
-      .set('name', username)
-      .set('panNumber', password);
+      .set('username', username)
+      .set('password', password);
        return this.http.get<any>(API_ENDPOINTS.loginCustomer, { params });
   }
  

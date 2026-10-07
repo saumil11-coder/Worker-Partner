@@ -69,7 +69,7 @@ export class Home {
       next: (res) => {
         
         console.log("hit successfully");
-        if(res.verified==="true"){
+        if(res.verified===true){
            this.loginPassed.set(res.verified);
            this.loginMessage.set('Valid');
         }

@@ -3,13 +3,14 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 import { RouterLink } from '@angular/router';
 import { RegistrationService } from '../../core/services/registeration-services';
 import { DevModeService } from '../../core/services/dev-mode.services';
+import { CommonModule } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-register-as-customer',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink,CommonModule],
   templateUrl: './register-as-customer.html',
   styleUrl: './register-as-customer.css',
 })
@@ -45,14 +46,28 @@ export class RegisterAsCustomer {
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { mismatch: true };
   }
-
+ 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log('Customer Registration Successful:', this.registerForm.value);
+      console.log('Customer Registration Request:', this.registerForm.value);
 
       this.registrationService.registerCustomer(this.registerForm.value).subscribe({
-        next: (res) => alert('Registration Successful!'),
-        error: (err) => alert('Registration failed: ' + err.error)
+        next: (res: any) => {
+          // Check if controller returned verifyResponse as false
+          if (res.verified === false) {
+            // Set custom error 'duplicateEmail' directly on the email form control
+            this.registerForm.get('email')?.setErrors({ duplicateEmail: true });
+            
+            // Mark email field as touched to force validation display in template
+            this.registerForm.get('email')?.markAsTouched();
+          } else {
+            // Proceed with success workflow
+            alert('Registration Successful!');
+          }
+        },
+        error: (err) => {
+          alert('Registration failed: ' + (err.error?.message || err.error || 'Server error'));
+        }
       });
 
     } else {

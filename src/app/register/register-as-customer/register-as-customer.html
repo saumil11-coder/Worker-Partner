@@ -49,6 +49,9 @@
         <div class="input-group dark-input">
           <label>Email Address</label>
           <input type="email" formControlName="email" />
+            <div *ngIf="registerForm.get('email')?.hasError('duplicateEmail')" class="error-message">
+            Email already exists. Please use a different email address.
+            </div>
         </div>
 
         
@@ -61,6 +64,7 @@
             <input type="password" formControlName="confirmPassword" />
           </div>
         
+
 
         <!-- Terms and Submit -->
         <div class="footer-actions">
