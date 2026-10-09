@@ -135,22 +135,39 @@ export class RegisterAsEmployee {
     this.router.navigate(['/home']);
 }
 
-  onSubmit(): void {
-    //Will have to uncomment further 
+
+
+   onSubmit(): void {
+      //Will have to uncomment further 
     // if (!this.aadharVerified() || !this.panVerified()) {
     //   alert('Please verify Aadhar and PAN before submitting');
     //   return;
     // }
-
     if (this.registerForm.valid) {
+      console.log('Customer Registration Request:', this.registerForm.value);
+
       this.registrationService.registerEmployee(this.registerForm.value).subscribe({
-        next: (res) => {this.showSuccessModal.set(true);},
-        error: (err) => alert('Registration failed: ' + err.error)
+        next: (res: any) => {
+          // Check if controller returned verifyResponse as false
+          if (res.verified === false) {
+            // Set custom error 'duplicateEmail' directly on the email form control
+            this.registerForm.get('email')?.setErrors({ duplicateEmail: true });
+            
+            // Mark email field as touched to force validation display in template
+            this.registerForm.get('email')?.markAsTouched();
+          } else {
+            // Proceed with success workflow
+            alert('Registration Successful!');
+          }
+        },
+        error: (err) => {
+          alert('Registration failed: ' + (err.error?.message || err.error || 'Server error'));
+        }
       });
+
     } else {
       this.registerForm.markAllAsTouched();
+      console.log('Form is invalid');
     }
-
-
   }
 }
