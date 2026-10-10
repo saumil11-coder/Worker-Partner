@@ -266,10 +266,12 @@
   .panel-title {
     margin-bottom: 25px;
   }
+
+}
+
   .error-message {
-  color: #ff4d4d;
+  color: #faf9f9;
   font-size: 0.85rem;
   margin-top: 4px;
   display: block;
-}
 }

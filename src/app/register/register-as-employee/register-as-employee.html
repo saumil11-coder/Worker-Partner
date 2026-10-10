@@ -73,6 +73,9 @@
         <div class="input-group dark-input">
           <label>Email Address</label>
           <input type="email" formControlName="email" />
+           <div *ngIf="registerForm.get('email')?.hasError('duplicateEmail')" class="error-message">
+            Email already exists. Please use a different email address.
+            </div>
         </div>
 
         <div class="input-group dark-input">

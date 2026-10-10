@@ -1,0 +1,348 @@
+/* General Reset & Fonts */
+.dashboard-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Header */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  background-color: #fff;
+  flex-wrap: wrap;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  color: #555;
+}
+
+.logo-text h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.logo-text p {
+  margin: 0;
+  font-size: 11px;
+  color: #777;
+  letter-spacing: 1.5px;
+}
+
+.contact-wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.yellow-circle {
+  border-color: #ffb600;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-info .label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.contact-info .value {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5%;
+  align-items: center;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 20px 20px;
+  display: block;
+  transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+  color: #ffb600;
+}
+
+.nav-links li.active {
+  border-bottom: 3px solid #ffb600;
+}
+
+.nav-quote a {
+  text-decoration: none;
+  color: #ffb600;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  /* REPLACE THIS URL WITH YOUR BACKGROUND IMAGE LATER */
+  background-image: url('/CustomerDashboard.png'); 
+  background-size: cover;
+  background-position: center;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  justify-content: center;
+  align-items: flex-end; /* Aligns content to the right as per image */
+  padding: 60px 5% 40px 5%;
+  color: #fff;
+}
+
+/* Adds a dark tint to the background image for readability */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.hero-content h2 {
+  font-size: 42px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.hero-content h2 span {
+  color: #ffb600;
+}
+
+.hero-content .divider {
+  width: 40px;
+  height: 3px;
+  background-color: #4080ff;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 80px;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: -50px;
+}
+
+.btn {
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-blue {
+  background-color: #4080ff;
+  color: #fff;
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Transparent Features Overlay */
+.features-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  right: 5%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-around;
+  padding: 30px;
+  z-index: 2;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #fff;
+}
+
+.feature-number {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.white-number {
+  background-color: #fff;
+  color: #333;
+}
+
+.yellow-number {
+  background-color: #ffb600;
+  color: #fff;
+}
+
+.feature-text h3 {
+  margin: 0 0 5px 0;
+
+}
+
+/* Navigation Dropdown Styles */
+/* Navigation Dropdown Styles */
+.nav-links .dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+.dropdown-menu li span {
+  padding: 12px 16px;
+  color: #fff;
+  display: block;
+  white-space: nowrap;
+  font-size: 13px;
+  border-bottom: 1px solid #444;
+  cursor: default;
+}
+
+.dropdown-menu li:last-child span {
+  border-bottom: none;
+}
+
+.dropdown-menu li:hover span {
+  background-color: #222;
+  color: #ffb600;
+}
+
+/* Show dropdown menu on hover */
+.nav-links .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Styling for footer to accommodate relocated contact info */
+.bottom-banner {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: -10px 5%;
+  display: flex;
+  flex-direction: column;
+  gap: -10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-top-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.footer-contact {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  width: 100%;
+}
+
+/* Adjust text labels for dark background in footer if needed */
+.footer-contact .contact-info .label {
+  color: #ffb600;
+}
+
+.footer-contact .contact-info .value {
+  color: #ccc;
+}
