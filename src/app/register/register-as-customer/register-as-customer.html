@@ -1,84 +1,174 @@
 <div class="register-wrapper">
-  <!-- Close Button linking back to home -->
-  <a routerLink="/" class="close-btn">✕</a>
-
   <div class="register-card">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-layout">
-      
-      <!-- Left Panel: General Information & Contact -->
-      <div class="panel light-panel">
-        <h2 class="panel-title blue-text">General Information</h2>
 
-        <div class="row">
-          <div class="input-group">
-            <label>First Name</label>
-            <input type="text" formControlName="firstName" />
-          </div>
-          <div class="input-group">
-            <label>Last Name</label>
-            <input type="text" formControlName="lastName" />
-          </div>
-        </div>
+    <!-- ============ Left: brand + steps ============ -->
+    <aside class="aside">
+      <div class="aside-inner">
+        <span class="brand"><span class="brand-mark">❖</span> WorkerPartner</span>
 
-        <div class="input-group">
-          <label>Phone Number</label>
-          <input type="tel" formControlName="phone" />
-        </div>
+        <h1>Find trusted professionals near you</h1>
+        <p class="aside-lead">Create your account in a minute and book verified experts for any service at home.</p>
 
-        <div class="input-group">
-          <label>Street Address</label>
-          <input type="text" formControlName="address" />
-        </div>
+        <ol class="steps">
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 1" (click)="goToSection(1)">
+              <span>1</span> Personal details
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 2" (click)="goToSection(2)">
+              <span>2</span> Address
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 3" (click)="goToSection(3)">
+              <span>3</span> Account security
+            </button>
+          </li>
+        </ol>
 
-        <div class="row">
-          <div class="input-group">
-            <label>State</label>
-            <input type="text" formControlName="state" />
-          </div>
-          <div class="input-group">
-            <label>Pincode</label>
-            <input type="text" formControlName="pincode" />
-          </div>
+        <div class="trust">
+          <span class="trust-icon">🔒</span>
+          <p>Your details are kept private and are shared only to complete your bookings.</p>
         </div>
       </div>
+    </aside>
 
-      <!-- Right Panel: Account & Security -->
-      <div class="panel dark-panel">
-        <h2 class="panel-title white-text">Account Security</h2>
+    <!-- ============ Right: form ============ -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form" novalidate>
 
-        <div class="input-group dark-input">
-          <label>Email Address</label>
-          <input type="email" formControlName="email" />
-            <div *ngIf="registerForm.get('email')?.hasError('duplicateEmail')" class="error-message">
-            Email already exists. Please use a different email address.
+      <header class="form-head">
+        <div>
+          <h2>Create your customer account</h2>
+          <p>Fields marked <span class="req">*</span> are required.</p>
+        </div>
+        <!-- Close button linking back to home -->
+        <a routerLink="/" class="close-btn" aria-label="Close">✕</a>
+      </header>
+
+      <!-- 1. Personal -->
+      <section class="section" id="section-1">
+        <header class="section-head">
+          <span class="step">1</span>
+          <div><h3>Personal details</h3><p>So professionals know who is booking</p></div>
+        </header>
+
+        <div class="grid">
+          <div class="field">
+            <label for="firstName">First name <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('firstName')">
+              <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. Ravi" autocomplete="given-name" />
             </div>
-        </div>
-
-        
-          <div class="input-group dark-input">
-            <label>Password</label>
-            <input type="password" formControlName="password" />
+            @if (fieldError('firstName'); as e) { <span class="status bad">{{ e }}</span> }
           </div>
-          <div class="input-group dark-input">
-            <label>Confirm Password</label>
-            <input type="password" formControlName="confirmPassword" />
+
+          <div class="field">
+            <label for="lastName">Last name <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('lastName')">
+              <input id="lastName" type="text" formControlName="lastName" placeholder="e.g. Shankar" autocomplete="family-name" />
+            </div>
+            @if (fieldError('lastName'); as e) { <span class="status bad">{{ e }}</span> }
           </div>
-        
 
-
-        <!-- Terms and Submit -->
-        <div class="footer-actions">
-          <label class="checkbox-container">
-            <input type="checkbox" formControlName="terms">
-            <span class="checkmark"></span>
-            I do accept the <a href="#">Terms and Conditions</a> of your site.
-          </label>
-
-          <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
-            Register Customer
-          </button>
+          <div class="field span-2">
+            <label for="phone">Phone number <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('phone')">
+              <span class="prefix">+91</span>
+              <input id="phone" type="tel" inputmode="numeric" maxlength="10" formControlName="phone" placeholder="10-digit mobile number" autocomplete="tel-national" />
+            </div>
+            @if (fieldError('phone'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
         </div>
-      </div>
+      </section>
+
+      <!-- 2. Address -->
+      <section class="section" id="section-2">
+        <header class="section-head">
+          <span class="step">2</span>
+          <div><h3>Address</h3><p>Where you need the service</p></div>
+        </header>
+
+        <div class="grid">
+          <div class="field span-2">
+            <label for="address">Street address <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('address')">
+              <input id="address" type="text" formControlName="address" placeholder="House no., street, area" autocomplete="street-address" />
+            </div>
+            @if (fieldError('address'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="state">State <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('state')">
+              <input id="state" type="text" formControlName="state" placeholder="e.g. West Bengal" autocomplete="address-level1" />
+            </div>
+            @if (fieldError('state'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="pincode">Pincode <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('pincode')">
+              <input id="pincode" type="text" inputmode="numeric" maxlength="6" formControlName="pincode" placeholder="6-digit pincode" autocomplete="postal-code" />
+            </div>
+            @if (fieldError('pincode'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Account -->
+      <section class="section" id="section-3">
+        <header class="section-head">
+          <span class="step">3</span>
+          <div><h3>Account security</h3><p>You'll log in with your email or mobile number</p></div>
+        </header>
+
+        <div class="grid">
+          <div class="field span-2">
+            <label for="email">Email address <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('email') || registerForm.get('email')?.hasError('duplicateEmail')">
+              <input id="email" type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+            @if (registerForm.get('email')?.hasError('duplicateEmail')) {
+              <span class="status bad">Email already exists. Please use a different email address.</span>
+            } @else if (fieldError('email'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="password">Password <span class="req">*</span></label>
+            <div class="input-wrap has-action" [class.invalid]="fieldError('password')">
+              <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder="At least 6 characters" autocomplete="new-password" />
+              <button type="button" class="ghost-btn" (click)="toggleShowPassword()">{{ showPassword() ? 'Hide' : 'Show' }}</button>
+            </div>
+            @if (fieldError('password'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword">Confirm password <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('confirmPassword') || passwordsMismatch()">
+              <input id="confirmPassword" [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" />
+            </div>
+            @if (passwordsMismatch()) {
+              <span class="status bad">Passwords don't match</span>
+            } @else if (fieldError('confirmPassword'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer: terms + submit -->
+      <footer class="form-footer">
+        <label class="checkbox">
+          <input type="checkbox" formControlName="terms" />
+          <span>I accept the <a href="#">Terms and Conditions</a> of this site.</span>
+        </label>
+
+        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
+          Register Customer
+        </button>
+      </footer>
 
     </form>
   </div>

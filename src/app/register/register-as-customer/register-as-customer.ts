@@ -1,21 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { RegistrationService } from '../../core/services/registeration-services';
 import { DevModeService } from '../../core/services/dev-mode.services';
-import { CommonModule } from '@angular/common';
-
-
 
 @Component({
   selector: 'app-register-as-customer',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink,CommonModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register-as-customer.html',
   styleUrl: './register-as-customer.css',
 })
 export class RegisterAsCustomer {
   registerForm: FormGroup;
+
+  // UI state
+  showPassword = signal(false);
+  activeStep = signal(1);
+
+  private readonly messages: Record<string, string> = {
+    firstName: 'Enter your first name',
+    lastName: 'Enter your last name',
+    phone: 'Enter a valid 10-digit mobile number',
+    address: 'Enter your street address',
+    state: 'Enter your state',
+    pincode: 'Enter a 6-digit pincode',
+    email: 'Enter a valid email address',
+    password: 'Use at least 6 characters',
+    confirmPassword: 'Confirm your password',
+  };
 
   constructor(private fb: FormBuilder, private registrationService: RegistrationService,
       private devMode: DevModeService
@@ -26,18 +39,40 @@ export class RegisterAsCustomer {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      
+
       // Right Panel Fields
       address: ['', Validators.required],
       state: ['', Validators.required],
       pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
-      
+
       // Terms Checkbox
       terms: [false, Validators.requiredTrue]
     }, { validators: this.passwordMatchValidator });
     this.devMode.stripValidators(this.registerForm);
+  }
+
+  // ---------- UI helpers ----------
+  fieldError(name: string): string {
+    const c = this.registerForm.get(name);
+    if (!c || !c.invalid || !(c.touched || c.dirty)) return '';
+    if (c.hasError('duplicateEmail')) return '';
+    return this.messages[name] ?? 'Invalid value';
+  }
+
+  passwordsMismatch(): boolean {
+    const c = this.registerForm.get('confirmPassword');
+    return !!c && !!c.value && (c.touched || c.dirty) && this.registerForm.hasError('mismatch');
+  }
+
+  toggleShowPassword(): void {
+    this.showPassword.update((v) => !v);
+  }
+
+  goToSection(n: number): void {
+    this.activeStep.set(n);
+    document.getElementById('section-' + n)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // Custom validator for password matching
@@ -46,7 +81,7 @@ export class RegisterAsCustomer {
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { mismatch: true };
   }
- 
+
   onSubmit(): void {
     if (this.registerForm.valid) {
       console.log('Customer Registration Request:', this.registerForm.value);
@@ -57,7 +92,7 @@ export class RegisterAsCustomer {
           if (res.verified === false) {
             // Set custom error 'duplicateEmail' directly on the email form control
             this.registerForm.get('email')?.setErrors({ duplicateEmail: true });
-            
+
             // Mark email field as touched to force validation display in template
             this.registerForm.get('email')?.markAsTouched();
           } else {
