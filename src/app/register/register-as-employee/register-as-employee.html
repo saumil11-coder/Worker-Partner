@@ -1,126 +1,294 @@
 <div class="register-wrapper">
   <div class="register-card">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-layout">
-      
-      <!-- Left Panel: General Information & Contact -->
-      <div class="panel light-panel">
-        <h2 class="panel-title blue-text">General Information</h2>
 
-        <div class="row">
-          <div class="input-group">
-            <label>First Name</label>
-            <input type="text" formControlName="firstName" />
-          </div>
-          <div class="input-group">
-            <label>Last Name</label>
-            <input type="text" formControlName="lastName" />
-          </div>
-        </div>
+    <!-- ============ Left: brand + steps ============ -->
+    <aside class="aside">
+      <div class="aside-inner">
+        <span class="brand"><span class="brand-mark">❖</span> WorkerPartner</span>
 
-        <div class="input-group">
-          <label>Phone Number</label>
-          <input type="tel" formControlName="phone" />
-        </div>
+        <h1>Grow your work with local customers</h1>
+        <p class="aside-lead">Create your professional profile in a few minutes and start receiving booking requests nearby.</p>
 
-        <div class="input-group">
-          <label>Street Address</label>
-          <input type="text" formControlName="address" />
-        </div>
+        <ol class="steps">
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 1" (click)="goToSection(1)">
+              <span>1</span> Personal details
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 2" (click)="goToSection(2)">
+              <span>2</span> Your professions
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 3" (click)="goToSection(3)">
+              <span>3</span> Address
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 4" (click)="goToSection(4)">
+              <span>4</span> Identity verification
+            </button>
+          </li>
+          <li>
+            <button type="button" class="steps-btn" [class.active]="activeStep() === 5" (click)="goToSection(5)">
+              <span>5</span> Account security
+            </button>
+          </li>
+        </ol>
 
-        <div class="row">
-          <div class="input-group">
-            <label>State</label>
-            <input type="text" formControlName="state" />
-          </div>
-          <div class="input-group">
-            <label>Pincode</label>
-            <input type="text" formControlName="pincode" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Aadhar Number</label>
-            <div class="input-with-button">
-              <input type="text" formControlName="aadharNumber" />
-              <button type="button" class="verify-btn" (click)="verifyAadhar()">Verify</button>
-            </div>
-            <span *ngIf="aadharMessage()" class="verify-message"
-                  [class.text-red]="!aadharVerified()" [class.text-green]="aadharVerified()">
-              <span class="verify-icon">{{ aadharVerified() ? '✓' : '✗' }}</span>
-              {{ aadharMessage() }}
-            </span>
-          </div>
-          <div class="input-group">
-            <label>PAN Number</label>
-            <div class="input-with-button">
-              <input type="text" formControlName="panNumber" />
-              <button type="button" class="verify-btn" (click)="verifyPan()">Verify</button>
-            </div>
-            <span *ngIf="panMessage()" class="verify-message"
-                  [class.text-red]="!panVerified()" [class.text-green]="panVerified()">
-              <span class="verify-icon">{{ panVerified() ? '✓' : '✗' }}</span>
-              {{ panMessage() }}
-            </span>
-          </div>
+        <div class="trust">
+          <span class="trust-icon">🔒</span>
+          <p>Your documents are used only for verification and are never shown to customers.</p>
         </div>
       </div>
+    </aside>
 
-      <!-- Right Panel: Account & Security -->
-      <div class="panel dark-panel">
-        <h2 class="panel-title white-text">Account Security</h2>
+    <!-- ============ Right: form ============ -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form" novalidate>
 
-        <div class="input-group dark-input">
-          <label>Email Address</label>
-          <input type="email" formControlName="email" />
-           <div *ngIf="registerForm.get('email')?.hasError('duplicateEmail')" class="error-message">
-            Email already exists. Please use a different email address.
+      <header class="form-head">
+        <h2>Register as a professional</h2>
+        <p>Fields marked <span class="req">*</span> are required.</p>
+      </header>
+
+      <!-- 1. Personal -->
+      <section class="section" id="section-1">
+        <header class="section-head">
+          <span class="step">1</span>
+          <div><h3>Personal details</h3><p>How customers will know you</p></div>
+        </header>
+
+        <div class="grid">
+          <div class="field">
+            <label for="firstName">First name <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('firstName')">
+              <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. Ravi" autocomplete="given-name" />
             </div>
+            @if (fieldError('firstName'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last name <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('lastName')">
+              <input id="lastName" type="text" formControlName="lastName" placeholder="e.g. Shankar" autocomplete="family-name" />
+            </div>
+            @if (fieldError('lastName'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field span-2">
+            <label for="phone">Phone number <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('phone')">
+              <span class="prefix">+91</span>
+              <input id="phone" type="tel" inputmode="numeric" maxlength="10" formControlName="phone" placeholder="10-digit mobile number" autocomplete="tel-national" />
+            </div>
+            @if (fieldError('phone'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
         </div>
+      </section>
 
-        <div class="input-group dark-input">
-          <label>Password</label>
-          <input type="password" formControlName="password" />
+      <!-- 2. Professions -->
+          <!-- 2. Professions -->
+      <section class="section" id="section-2">
+        <header class="section-head">
+          <span class="step">2</span>
+          <div><h3>Your professions</h3><p>Pick what you do best. You can add up to three.</p></div>
+        </header>
+
+        <div class="grid grid-3">
+          <div class="field">
+            <label for="profession1">Primary profession <span class="req">*</span></label>
+            <div class="input-wrap select-wrap" [class.invalid]="fieldError('profession1')">
+              <select id="profession1" formControlName="profession1">
+                <option [ngValue]="null" disabled>
+                  {{ professionsLoading() ? 'Loading professions…' : 'Select primary profession' }}
+                </option>
+                @for (p of professions(); track p) {
+                  <option [ngValue]="p">{{ p }}</option>
+                }
+              </select>
+            </div>
+            @if (professionsError()) {
+              <span class="status bad">
+                Couldn't load professions.
+                <button type="button" class="link-btn" (click)="loadProfessions()">Retry</button>
+              </span>
+            } @else if (fieldError('profession1'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="profession2">Second profession <span class="opt">Optional</span></label>
+            <div class="input-wrap select-wrap">
+              <select id="profession2" formControlName="profession2">
+                <option [ngValue]="null">Select second profession</option>
+                @for (p of profession2Options(); track p) {
+                  <option [ngValue]="p">{{ p }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="profession3">Third profession <span class="opt">Optional</span></label>
+            <div class="input-wrap select-wrap">
+              <select id="profession3" formControlName="profession3">
+                <option [ngValue]="null">Select third profession</option>
+                @for (p of profession3Options(); track p) {
+                  <option [ngValue]="p">{{ p }}</option>
+                }
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="input-group dark-input">
-          <label>Confirm Password</label>
-          <input type="password" formControlName="confirmPassword" />
+      </section>
+
+      <!-- 3. Address -->
+      <section class="section" id="section-3">
+        <header class="section-head">
+          <span class="step">3</span>
+          <div><h3>Address</h3><p>Used to match you with customers nearby</p></div>
+        </header>
+
+        <div class="grid">
+          <div class="field span-2">
+            <label for="address">Street address <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('address')">
+              <input id="address" type="text" formControlName="address" placeholder="House no., street, area" autocomplete="street-address" />
+            </div>
+            @if (fieldError('address'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="state">State <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('state')">
+              <input id="state" type="text" formControlName="state" placeholder="e.g. West Bengal" autocomplete="address-level1" />
+            </div>
+            @if (fieldError('state'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
+
+          <div class="field">
+            <label for="pincode">Pincode <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('pincode')">
+              <input id="pincode" type="text" inputmode="numeric" maxlength="6" formControlName="pincode" placeholder="6-digit pincode" autocomplete="postal-code" />
+            </div>
+            @if (fieldError('pincode'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
         </div>
+      </section>
 
-        <!-- Terms and Submit -->
-        <div class="footer-actions">
-          <label class="checkbox-container">
-            <input type="checkbox" formControlName="terms">
-            <span class="checkmark"></span>
-            I do accept the <a href="#">Terms and Conditions</a> of your site.
-          </label>
+      <!-- 4. Identity -->
+      <section class="section" id="section-4">
+        <header class="section-head">
+          <span class="step">4</span>
+          <div><h3>Identity verification</h3><p>Verified professionals get more bookings</p></div>
+        </header>
 
-          <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
-            Register Employee
-          </button>
+        <div class="grid">
+          <div class="field">
+            <label for="aadhar">Aadhar number <span class="req">*</span></label>
+            <div class="input-wrap has-action" [class.invalid]="fieldError('aadharNumber')" [class.verified]="aadharVerified()">
+              <input id="aadhar" type="text" inputmode="numeric" maxlength="12" formControlName="aadharNumber" placeholder="12-digit Aadhar number" />
+              <button type="button" class="verify-btn" [class.done]="aadharVerified()" (click)="verifyAadhar()">
+                {{ aadharVerified() ? 'Verified' : 'Verify' }}
+              </button>
+            </div>
+            @if (aadharMessage()) {
+              <span class="status" [class.ok]="aadharVerified()" [class.bad]="!aadharVerified()">
+                <span class="status-icon">{{ aadharVerified() ? '✓' : '✗' }}</span> {{ aadharMessage() }}
+              </span>
+            } @else if (fieldError('aadharNumber'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="pan">PAN number <span class="req">*</span></label>
+            <div class="input-wrap has-action" [class.invalid]="fieldError('panNumber')" [class.verified]="panVerified()">
+              <input id="pan" type="text" maxlength="10" class="upper" formControlName="panNumber" (input)="upperPan()" placeholder="ABCDE1234F" />
+              <button type="button" class="verify-btn" [class.done]="panVerified()" (click)="verifyPan()">
+                {{ panVerified() ? 'Verified' : 'Verify' }}
+              </button>
+            </div>
+            @if (panMessage()) {
+              <span class="status" [class.ok]="panVerified()" [class.bad]="!panVerified()">
+                <span class="status-icon">{{ panVerified() ? '✓' : '✗' }}</span> {{ panMessage() }}
+              </span>
+            } @else if (fieldError('panNumber'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
         </div>
+      </section>
 
-<!-- Existing Form Markup Above -->
+      <!-- 5. Account -->
+      <section class="section" id="section-5">
+        <header class="section-head">
+          <span class="step">5</span>
+          <div><h3>Account security</h3><p>You'll log in with your email or mobile number</p></div>
+        </header>
 
+        <div class="grid">
+          <div class="field span-2">
+            <label for="email">Email address <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('email') || registerForm.get('email')?.hasError('duplicateEmail')">
+              <input id="email" type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+            @if (registerForm.get('email')?.hasError('duplicateEmail')) {
+              <span class="status bad">Email already exists. Please use a different email address.</span>
+            } @else if (fieldError('email'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
 
+          <div class="field">
+            <label for="password">Password <span class="req">*</span></label>
+            <div class="input-wrap has-action" [class.invalid]="fieldError('password')">
+              <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder="At least 6 characters" autocomplete="new-password" />
+              <button type="button" class="ghost-btn" (click)="toggleShowPassword()">{{ showPassword() ? 'Hide' : 'Show' }}</button>
+            </div>
+            @if (fieldError('password'); as e) { <span class="status bad">{{ e }}</span> }
+          </div>
 
-      </div>
+          <div class="field">
+            <label for="confirmPassword">Confirm password <span class="req">*</span></label>
+            <div class="input-wrap" [class.invalid]="fieldError('confirmPassword') || passwordsMismatch()">
+              <input id="confirmPassword" [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" />
+            </div>
+            @if (passwordsMismatch()) {
+              <span class="status bad">Passwords don't match</span>
+            } @else if (fieldError('confirmPassword'); as e) {
+              <span class="status bad">{{ e }}</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer: terms + submit -->
+      <footer class="form-footer">
+        <label class="checkbox">
+          <input type="checkbox" formControlName="terms" />
+          <span>I accept the <a href="#">Terms and Conditions</a> of this site.</span>
+        </label>
+
+        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
+          Register Employee
+        </button>
+      </footer>
 
     </form>
-
-      <!-- Custom Success Modal Popup -->
-
   </div>
-
-
-
 </div>
 
-<div class="modal-overlay" *ngIf="showSuccessModal()">
-  <div class="modal-card">
-    <div class="modal-icon">✓</div>
-    <h3>Registration Successful!</h3>
-    <p>Please Login with Mobile/Gmail and Password</p>
-    <button class="modal-btn" (click)="navigateToHome()">OK</button>
+<!-- Success modal -->
+@if (showSuccessModal()) {
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">✓</div>
+      <h3>Registration Successful!</h3>
+      <p>Please Login with Mobile/Gmail and Password</p>
+      <button type="button" class="modal-btn" (click)="navigateToHome()">OK</button>
+    </div>
   </div>
-</div>  
+}

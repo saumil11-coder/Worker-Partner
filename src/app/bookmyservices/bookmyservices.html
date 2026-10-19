@@ -1,0 +1,238 @@
+<main class="page">
+
+  <!-- Top bar with profile (top-right corner) -->
+  <header class="topbar">
+    <span class="mini-brand"><span>❖</span> WorkerPartner</span>
+    <app-profile-menu />
+  </header>
+
+  <!-- ============ 1) SERVICE SELECTION ============ -->
+  @if (view() === 'select') {
+    <section class="select-view">
+      <span class="eyebrow">Trusted local professionals</span>
+      <h1>What do you need <span class="accent-text">help with</span> today?</h1>
+      <p class="lead">Tell us the service and we'll match you with verified experts near you.</p>
+
+      <!-- Smart search bar -->
+      <div class="search-bar">
+        <div class="search-field service-field">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Plumbing, cleaning, electrician, tutor…"
+            [value]="query()"
+            (input)="onQueryInput($event)"
+            (focus)="showSuggestions.set(true)"
+            (blur)="hideSuggestionsSoon()"
+            (keydown.enter)="findWorkers()"
+            aria-label="Service needed"
+          />
+
+          @if (showSuggestions() && suggestions().length) {
+            <ul class="suggestions">
+              @for (s of suggestions(); track s.id) {
+                <li (mousedown)="pickCategory(s); $event.preventDefault()">
+                  <app-service-icon [name]="s.iconKey" /> {{ s.name }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <span class="divider"></span>
+
+        <!-- Address selector: opens popup -->
+        <button type="button" class="search-field location-field location-btn" (click)="addressModalOpen.set(true)">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span class="loc-text">
+            @if (selectedAddress(); as a) {
+              <strong>{{ a.label }}</strong>
+              <small>{{ a.line1 }}</small>
+            } @else {
+              <strong>Select address</strong>
+            }
+          </span>
+          <span class="chev">▾</span>
+        </button>
+
+        <button type="button" class="btn-primary" [disabled]="!canSearch()" (click)="findWorkers()">
+          Find Nearby Workers
+        </button>
+      </div>
+
+      <!-- Popular categories (from backend) -->
+      <h2 class="section-title">Popular services</h2>
+
+      @if (categoriesLoading()) {
+        <div class="category-grid">
+          @for (n of [1, 2, 3, 4, 5, 6, 7, 8]; track n) {
+            <div class="category-card skeleton"></div>
+          }
+        </div>
+      } @else if (categoriesError()) {
+        <div class="error-box">
+          <p>We couldn't load the services right now.</p>
+          <button type="button" class="btn-ghost" (click)="loadCategories()">Try again</button>
+        </div>
+      } @else {
+        <div class="category-grid">
+          @for (cat of categories(); track cat.id) {
+            <button
+              type="button"
+              class="category-card"
+              [class.selected]="query() === cat.name"
+              (click)="pickCategory(cat)"
+            >
+              <span class="cat-icon"><app-service-icon [name]="cat.iconKey" /></span>
+              <span class="cat-name">{{ cat.name }}</span>
+            </button>
+          }
+
+
+          @for (p of placeholder(); track $index) {
+  <div class="category-card placeholder" aria-hidden="true">
+    <span class="cat-icon"></span>
+    <span class="cat-name">&nbsp;</span>
+  </div>
+  
+}
+        </div>
+
+        <!-- Pagination (hidden when everything fits on one page) -->
+        @if (totalPages() > 1) {
+          <nav class="pager" aria-label="Service pages">
+            <button type="button" class="pager-btn" [disabled]="page() === 1" (click)="goToPage(page() - 1)">‹ Prev</button>
+
+            @for (n of pageNumbers(); track n) {
+              <button type="button" class="pager-num" [class.active]="n === page()" (click)="goToPage(n)">{{ n }}</button>
+            }
+
+            <button type="button" class="pager-btn" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">Next ›</button>
+          </nav>
+        }
+      }
+    </section>
+  }
+
+  <!-- ============ 2) LOADING (RADAR) ============ -->
+  @if (view() === 'loading') {
+    <section class="loading-view">
+      <div class="radar">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="sweep"></span>
+        <span class="radar-center">📍</span>
+      </div>
+      <h2>Scanning for nearby {{ activeService() }} professionals…</h2>
+      <p class="lead">Checking availability around {{ addressText() }}</p>
+    </section>
+  }
+
+  <!-- ============ 3) RESULTS ============ -->
+  @if (view() === 'results') {
+    <section class="results-view">
+
+      <div class="results-top">
+        <button type="button" class="back-link" (click)="changeService()">← Change service</button>
+        <h1>{{ workers().length }} <span class="accent-text">{{ activeService() }}</span> pros near you</h1>
+        <span class="badge-radius">
+          📍 Within 5 km of {{ addressText() }}
+          <button type="button" class="link-btn" (click)="addressModalOpen.set(true)">Change</button>
+        </span>
+      </div>
+
+      <div class="results-layout">
+
+        <!-- Mini proximity map -->
+        <aside class="map-card">
+          <div class="map">
+            <span class="radius-circle"></span>
+            <span class="user-pin"><i></i></span>
+            @for (w of workers(); track w.id; let i = $index) {
+              <span class="worker-pin" [style.left.%]="pins[i].x" [style.top.%]="pins[i].y" [title]="w.name">
+                {{ w.initials }}
+              </span>
+            }
+          </div>
+          <p class="map-caption">All professionals are within <strong>5 km</strong> of you.</p>
+        </aside>
+
+        <div class="results-main">
+          <!-- Sort chips -->
+          <div class="sort-row">
+            <span>Sort by</span>
+            <button type="button" class="chip" [class.active]="sortBy() === 'distance'" (click)="setSort('distance')">Nearest</button>
+            <button type="button" class="chip" [class.active]="sortBy() === 'rating'" (click)="setSort('rating')">Top rated</button>
+            <button type="button" class="chip" [class.active]="sortBy() === 'price'" (click)="setSort('price')">Lowest price</button>
+          </div>
+
+          <!-- Worker cards -->
+          <div class="worker-grid">
+            @for (w of sortedWorkers(); track w.id) {
+              <article class="worker-card">
+                <header class="card-head">
+                  @if (w.photo) {
+                    <img class="avatar" [src]="w.photo" [alt]="w.name" />
+                  } @else {
+                    <span class="avatar" [style.background]="w.color">{{ w.initials }}</span>
+                  }
+                  <div class="who">
+                    <h3>
+                      {{ w.name }}
+                      @if (w.verified) {
+                        <svg class="verified" viewBox="0 0 24 24" aria-label="Verified">
+                          <circle cx="12" cy="12" r="11" fill="#2563eb"/>
+                          <path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      }
+                    </h3>
+                    <span class="meta">📍 {{ w.distanceKm }} km away · {{ w.jobsDone }} jobs</span>
+                  </div>
+                  <div class="rate">
+                    <strong>₹{{ w.hourlyRate }}</strong>
+                    <span>/hour</span>
+                  </div>
+                </header>
+
+                <div class="rating-row">
+                  <span class="stars" [style.--pct]="(w.rating / 5 * 100) + '%'">★★★★★</span>
+                  <strong>{{ w.rating }}</strong><span class="muted">/5 ({{ w.reviewCount }} reviews)</span>
+                </div>
+
+                <blockquote class="review">
+                  <p>"{{ w.topReview.text }}"</p>
+                  <cite>— {{ w.topReview.author }}</cite>
+                </blockquote>
+
+                <footer class="card-actions">
+                  <button type="button" class="btn-ghost">View Profile</button>
+                  <button type="button" class="btn-primary small" (click)="book(w)">Book Now</button>
+                </footer>
+              </article>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Address popup -->
+  @if (addressModalOpen()) {
+    <app-address-picker
+      mode="select"
+      [selectedId]="selectedAddress()?.id ?? null"
+      (picked)="onAddressPicked($event)"
+      (closed)="addressModalOpen.set(false)"
+    />
+  }
+
+  <!-- Toast -->
+  @if (toast()) {
+    <div class="toast" role="status">✓ {{ toast() }}</div>
+  }
+</main>

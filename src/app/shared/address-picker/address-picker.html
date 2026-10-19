@@ -1,0 +1,95 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="mode() === 'manage' ? 'Saved addresses' : 'Select address'"
+    (click)="$event.stopPropagation()"
+  >
+
+    <header class="modal-head">
+      <h2>{{ mode() === 'manage' ? 'Saved addresses' : 'Select address' }}</h2>
+      <button type="button" class="close-btn" aria-label="Close" (click)="closed.emit()">✕</button>
+    </header>
+
+    <!-- SELECT MODE ONLY: current location -->
+    @if (mode() === 'select') {
+      <button type="button" class="current-loc" [disabled]="locating()" (click)="useCurrentLocation()">
+        🎯 {{ locating() ? 'Detecting your location…' : 'Use my current location' }}
+      </button>
+      @if (locationError()) {
+        <p class="error">{{ locationError() }}</p>
+      }
+      <h3>Saved addresses</h3>
+    }
+
+    @if (addressService.addresses().length === 0) {
+      <p class="empty">
+        @if (mode() === 'select') {
+          You have no saved addresses yet. Add one from <strong>Profile → Saved Addresses</strong>, or use your current location.
+        } @else {
+          No saved addresses yet. Add your first one below.
+        }
+      </p>
+    }
+
+    <ul class="addr-list">
+      @for (a of addressService.addresses(); track a.id) {
+        <li>
+          @if (mode() === 'select') {
+            <!-- Select only: tap to choose -->
+            <button type="button" class="addr" [class.selected]="a.id === selectedId()" (click)="select(a)">
+              <span class="tag">{{ a.label }}</span>
+              <span class="txt">{{ a.line1 }}, {{ a.city }} – {{ a.pincode }}</span>
+              @if (a.id === selectedId()) {
+                <span class="tick">✓</span>
+              }
+            </button>
+          } @else {
+            <!-- Manage: edit / delete -->
+            <div class="addr manage-row">
+              <span class="tag">{{ a.label }}</span>
+              <span class="txt">{{ a.line1 }}, {{ a.city }} – {{ a.pincode }}</span>
+
+              @if (confirmDeleteId() === a.id) {
+                <span class="confirm">
+                  Delete?
+                  <button type="button" (click)="cancelDelete()">No</button>
+                  <button type="button" class="yes" (click)="confirmDelete(a)">Yes</button>
+                </span>
+              } @else {
+                <button type="button" class="icon-btn" aria-label="Edit address" (click)="openEdit(a)">✏️</button>
+                <button type="button" class="icon-btn danger" aria-label="Delete address" (click)="askDelete(a)">🗑️</button>
+              }
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    <!-- MANAGE MODE ONLY: add / edit form -->
+    @if (mode() === 'manage') {
+      @if (!formOpen()) {
+        <button type="button" class="add-link" (click)="openAdd()">+ Add new address</button>
+      } @else {
+        <form class="add-form" [formGroup]="form" (ngSubmit)="saveForm()">
+          <h3 class="form-title">{{ editingId() === null ? 'Add new address' : 'Edit address' }}</h3>
+          <select formControlName="label">
+            <option>Home</option>
+            <option>Work</option>
+            <option>Other</option>
+          </select>
+          <input type="text" formControlName="line1" placeholder="House no., street, area" />
+          <div class="row">
+            <input type="text" formControlName="city" placeholder="City" />
+            <input type="text" formControlName="pincode" placeholder="Pincode" maxlength="6" />
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="cancelForm()">Cancel</button>
+            <button type="submit" class="btn-save">{{ editingId() === null ? 'Save address' : 'Update address' }}</button>
+          </div>
+        </form>
+      }
+    }
+  </div>
+</div>

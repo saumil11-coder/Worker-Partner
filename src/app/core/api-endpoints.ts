@@ -10,5 +10,7 @@ export const API_ENDPOINTS = {
   RegisterAsEmployee: `${environment.apiUrl}/registeremployee`,
   loginEmployee: `${environment.apiUrl}/find/employee`,
   loginCustomer: `${environment.apiUrl}/find/customer`,
+  services: `${environment.apiUrl}/find/catalogservice`,
+  allprofessions: `${environment.apiUrl}/find/allcatalogservice`,
 
 }
