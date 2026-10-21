@@ -12,5 +12,9 @@ export const API_ENDPOINTS = {
   loginCustomer: `${environment.apiUrl}/find/customer`,
   services: `${environment.apiUrl}/find/catalogservice`,
   allprofessions: `${environment.apiUrl}/find/allcatalogservice`,
+  getAllActiveAddresses: `${environment.apiUrl}/get/allActiveAddresses`,
+ updateActiveAddress: `${environment.apiUrl}/update/allActiveAddress`,
+  insertNewAddress: `${environment.apiUrl}/insert/newAddress`,
+   deleteActiveAddress: `${environment.apiUrl}/delete/allActiveAddress`,
 
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, input, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Address, AddressService } from '../../core/services/address.service';
 
@@ -9,7 +9,7 @@ import { Address, AddressService } from '../../core/services/address.service';
   templateUrl: './address-picker.html',
   styleUrl: './address-picker.css',
 })
-export class AddressPicker {
+export class AddressPicker implements OnInit {
   private fb = inject(FormBuilder);
   readonly addressService = inject(AddressService);
 
@@ -23,6 +23,9 @@ export class AddressPicker {
   picked = output<Address>();
   closed = output<void>();
 
+  // the scrollable address list (used to scroll to a newly added address)
+  @ViewChild('list') private list?: ElementRef<HTMLElement>;
+
   // manage-mode state
   formOpen = signal(false);
   editingId = signal<number | null>(null);
@@ -32,12 +35,23 @@ export class AddressPicker {
   locating = signal(false);
   locationError = signal('');
 
+  // backend call state
+  saving = signal(false);
+  saveError = signal('');
+  actionError = signal('');
+
   form = this.fb.nonNullable.group({
     label: ['Home', Validators.required],
     line1: ['', Validators.required],
     city: ['', Validators.required],
+    state: ['', Validators.required],
     pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
   });
+
+  ngOnInit(): void {
+    // fetch the saved addresses from the backend (only the first time)
+    this.addressService.ensureLoaded();
+  }
 
   // ---------- select mode ----------
   select(address: Address): void {
@@ -60,6 +74,7 @@ export class AddressPicker {
           label: 'Current',
           line1: 'Current location',
           city: '',
+          state: '',
           pincode: '',
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
@@ -86,6 +101,7 @@ export class AddressPicker {
       label: address.label,
       line1: address.line1,
       city: address.city,
+      state: address.state ?? '',
       pincode: address.pincode,
     });
     this.formOpen.set(true);
@@ -94,6 +110,7 @@ export class AddressPicker {
   cancelForm(): void {
     this.formOpen.set(false);
     this.editingId.set(null);
+    this.saveError.set('');
   }
 
   saveForm(): void {
@@ -104,12 +121,27 @@ export class AddressPicker {
     const value = this.form.getRawValue();
     const id = this.editingId();
 
-    if (id === null) {
-      this.addressService.add(value);
-    } else {
-      this.addressService.update(id, value);
-    }
-    this.cancelForm();
+    this.saving.set(true);
+    this.saveError.set('');
+
+    const request$ = id === null
+      ? this.addressService.add(value)
+      : this.addressService.update(id, value);
+
+    request$.subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.cancelForm();
+        if (id === null) {
+          // the new address is at the end of the list: scroll down so it is visible
+          setTimeout(() => this.list?.nativeElement.scrollTo({ top: this.list.nativeElement.scrollHeight, behavior: 'smooth' }));
+        }
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.saveError.set(err?.error?.message || 'Could not save the address. Please try again.');
+      },
+    });
   }
 
   // ---------- manage mode: delete ----------
@@ -123,8 +155,14 @@ export class AddressPicker {
   }
 
   confirmDelete(address: Address): void {
-    this.addressService.remove(address.id);
-    this.confirmDeleteId.set(null);
+    this.actionError.set('');
+    this.addressService.remove(address.id).subscribe({
+      next: () => this.confirmDeleteId.set(null),
+      error: (err) => {
+        this.confirmDeleteId.set(null);
+        this.actionError.set(err?.error?.message || 'Could not delete the address. Please try again.');
+      },
+    });
   }
 
   @HostListener('document:keydown.escape')

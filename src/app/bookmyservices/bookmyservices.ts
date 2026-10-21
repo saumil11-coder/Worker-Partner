@@ -1,4 +1,4 @@
-import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, computed, inject, signal, effect } from '@angular/core';
 import { AddressPicker } from '../shared/address-picker/address-picker';
 import { ProfileMenu } from '../shared/profile-menu/profile-menu';
 import { ServiceIcon } from '../shared/service-icon/service-icon';
@@ -103,11 +103,20 @@ export class Bookmyservices implements OnDestroy {
       review: 'Honest advice and spotless finish. Highly recommend!', author: 'Vikram T.' },
   ];
 
-  constructor() {
-    this.loadCategories();
-    // Default to the first saved address
-    this.selectedId.set(this.addressService.addresses()[0]?.id ?? null);
+constructor() {
+  this.loadCategories();
+  this.addressService.ensureLoaded();
+
+effect(() => {
+  const list = this.addressService.addresses();
+  const id = this.selectedId();
+  const exists = id === 0 || list.some((a) => a.id === id);
+
+  if ((id === null || !exists) && list.length) {
+    this.selectedId.set(list[0].id);
   }
+});
+}
 
   // ---------- derived ----------
   canSearch = computed(() => this.query().trim().length > 0);
