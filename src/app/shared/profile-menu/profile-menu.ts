@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AddressPicker } from '../address-picker/address-picker';
+import { AuthService } from '../../core/services/auth-service';
 
 interface MenuItem {
   label: string;
@@ -19,7 +20,7 @@ interface MenuItem {
 export class ProfileMenu {
   private router = inject(Router);
   private host = inject<ElementRef<HTMLElement>>(ElementRef);
-
+private auth = inject(AuthService);
   // Later: feed this from the logged-in customer's session
   name = input('Customer');
 
@@ -50,11 +51,12 @@ export class ProfileMenu {
     }
   }
 
-  logout(): void {
-    this.open.set(false);
-    // Later: clear stored session / token here
-    this.router.navigate(['/']);
-  }
+ // [CHANGED] Flow: close dropdown -> clear the session -> go to login page.
+logout(): void {
+  this.open.set(false);       // [EXISTING]
+  this.auth.logout();         // [NEW] this was the "Later: clear stored session" TODO
+  this.router.navigate(['/']); // [EXISTING]
+}
 
   // Close the dropdown when clicking anywhere outside the menu
   @HostListener('document:click', ['$event'])

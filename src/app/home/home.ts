@@ -70,18 +70,16 @@ export class Home {
         
         console.log("hit successfully");
         if(res.verified===true){
-           this.loginPassed.set(res.verified);
-           this.loginMessage.set('Valid');
+            // [CHANGED] The session was already saved inside AuthService (tap), so no storing here.
+        this.loginPassed.set(true);
+        this.loginMessage.set('Valid');
+        // [CHANGED] Navigation moved INSIDE the success branch (before, it also ran on failure)
+        this.router.navigate([this.role === 'employee' ? '/employee/dashboard' : '/customer/dashboard']);
         }
         else{
-          this.loginFailed.set(res.verified);
+          this.loginFailed.set(true);
           this.loginMessage.set('Invalid email/phone or password');
         }
-        
-
-        // 🔀 Redirect straight to the right portal on success
-        const destination = this.role === 'employee' ? '/employee/dashboard' : '/customer/dashboard';
-        this.router.navigate([destination]);
       },
       error: (err) => {
         this.loginFailed.set(true);

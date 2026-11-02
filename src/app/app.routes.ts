@@ -5,14 +5,15 @@ import { RegisterAsCustomer } from './register/register-as-customer/register-as-
 import { RegisterAsEmployee } from './register/register-as-employee/register-as-employee'; 
 import {CustomerDashboard} from './dashboards/customer-dashboard/customer-dashboard';
 import {Bookmyservices} from './bookmyservices/bookmyservices';
-
+import {roleGuard} from './core/services/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   //   { path: 'employee/dashboard', component: EmployeeDashboard },
-  { path: 'customer/dashboard', component: CustomerDashboard },
-
-  { path: 'customer/bookmyservices', component: Bookmyservices },
+    { path: 'customer/dashboard', component: CustomerDashboard,
+    canActivate: [roleGuard('customer')] },                        // [CHANGED] guard added
+  // { path: 'employee/dashboard', component: EmployeeDashboard,
+  //   canActivate: [roleGuard('employee')] },  
 
   { 
     path: 'register', 

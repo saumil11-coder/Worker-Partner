@@ -110,8 +110,7 @@ constructor() {
 effect(() => {
   const list = this.addressService.addresses();
   const id = this.selectedId();
-  const exists = id === 0 || list.some((a) => a.id === id);
-
+  const exists = id === 0 || list.some((a) => a.id === id); // 0 = "current location"
   if ((id === null || !exists) && list.length) {
     this.selectedId.set(list[0].id);
   }
